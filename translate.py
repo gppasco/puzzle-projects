@@ -122,7 +122,7 @@ LANGUAGES = {
     'yo': 'yoruba',
     'zu': 'zulu'}
 
-# SHORTER LIST OF LANGUAGES
+# SHORTER LIST OF LANGUAGES (compatible with Latin-1). EDIT LIKE THIS https://en.wikipedia.org/wiki/ISO/IEC_8859-1
 LATIN_LANG = {
 	'af': 'afrikaans',
     'eu': 'basque',
@@ -147,7 +147,6 @@ LATIN_LANG = {
 # READING PUZ FILE
 filename= sys.argv[1]
 
-# NOTE: The .puz file to translate should be in a folder called "puztranslate"
 p = puz.read(filename + ".puz")
 
 old_clues = p.clues
@@ -162,15 +161,13 @@ pool = ThreadPool(20) # Threads
 def request(text):
     lang = "fr"
     t = google_translator(timeout=5)
-    # TRANSLATES TO RANDOM LANGUAGES A RANDOM NUMBER OF TIMES
+    # TRANSLATES TO RANDOM LANGUAGES FOUR TIMES
     num_translations = 4
     for i in range(num_translations):
         lang = random.choice(list(LATIN_LANG.keys()))
         text = t.translate(text, lang)
         text = t.translate(text, "en")
     translateFINAL = t.translate(text, "en")
-    #translateFINAL = t.translate(translateFINAL, "la")
-    #translateFINAL = t.translate(translateFINAL, "en")   
     translateFINAL = re.sub(u"(\u201c|\u201d)", "\"", translateFINAL)
     translateFINAL = re.sub(u"(\u2018|\u2019)", "'", translateFINAL)
 
